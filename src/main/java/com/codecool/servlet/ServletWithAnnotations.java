@@ -1,4 +1,4 @@
-package net.javatutorial.tutorials;
+package com.codecool.servlet;
 
 import java.io.IOException;
 
