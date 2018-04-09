@@ -1,1 +1,5 @@
-For code explanation and additional configurations read the tutorial at https://javatutorial.net/servlet-annotation-example
+# Example project for basic Servlets
+* Navigation
+* Generating HTML
+* GET parameter processing
+* Runs on Jetty
