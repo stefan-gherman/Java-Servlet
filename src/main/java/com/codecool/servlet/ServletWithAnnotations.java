@@ -10,9 +10,6 @@ import java.io.PrintWriter;
 @WebServlet(name = "simpleServlet", urlPatterns = {"/"}, loadOnStartup = 1)
 public class ServletWithAnnotations extends HttpServlet {
 
-    private static final long serialVersionUID = -3462096228274971485L;
-
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
