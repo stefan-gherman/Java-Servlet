@@ -29,7 +29,7 @@ public class AnotherServlet extends HttpServlet {
                 "<html>\n" +
                         "<head><title>Another page</title></head>\n" +
                         "<body>\n" +
-                        "<h1>Happy coding!</h1>" +
+                        "<h1>Hello CodeCooler!</h1>" +
                         (linkId == null ?
                                 "<h3>No link was pressed</h3>" :
                                 "<h3>Link " + linkId + " was pressed!</h3>") +

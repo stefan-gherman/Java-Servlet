@@ -18,7 +18,7 @@ public class ServletWithAnnotations extends HttpServlet {
             throws IOException {
 
         PrintWriter out = response.getWriter();
-        String title = "Using GET Method to Read Form Data";
+        String title = "GET method with parameters to display";
 
         out.println(
                 "<html>\n" +
