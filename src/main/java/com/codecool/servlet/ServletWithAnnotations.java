@@ -26,7 +26,8 @@ public class ServletWithAnnotations extends HttpServlet {
                 "<li><b>First Name</b>: " + request.getParameter("first_name") + "\n" +
                 "<li><b>Last Name</b>: " + request.getParameter("last_name") + "\n" +
                 "</ul>\n" +
-                "<div>Visit another servlet: <a href=\"/another\">Visit the other servlet</a></div>" +
+                "<div>Visit another servlet: <a href=\"/another\">Visit the other servlet</a></div>"+
+                        "<div>Not another <a href=\"/test\">one</a></div>" +
                 "</body></html>"
         );
     }
