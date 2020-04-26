@@ -16,8 +16,11 @@ public class Cart {
     }
 
     public void removeItemFromCart(Item item) {
-        if(itemsList.contains(item)) {
-            itemsList.remove(item);
+        for (Item currentItem : itemsList ){
+            if(item.getProductName().equals(currentItem.getProductName())){
+                itemsList.remove(currentItem);
+                return;
+            }
         }
     }
 

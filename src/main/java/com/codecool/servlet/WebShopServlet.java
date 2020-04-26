@@ -6,6 +6,7 @@ import au.com.codeka.carrot.CarrotException;
 import au.com.codeka.carrot.Configuration;
 import au.com.codeka.carrot.bindings.MapBindings;
 import au.com.codeka.carrot.resource.FileResourceLocator;
+import com.codecool.logic.Cart;
 import com.codecool.logic.Item;
 import com.codecool.logic.Stock;
 import com.google.common.collect.ImmutableMap;
@@ -25,6 +26,8 @@ import java.util.*;
 @WebServlet(name = "WebShop", urlPatterns = {"/"}, loadOnStartup = 1)
 public class WebShopServlet extends HttpServlet {
     private Stock currentStock;
+    private Cart currentCart = new Cart();
+
 
     public void populateStock() {
 
@@ -57,8 +60,8 @@ public class WebShopServlet extends HttpServlet {
             tableData.append("<tr>");
             tableData.append(String.format("<td>%s</td>", item.getProductName()));
             tableData.append(String.format("<td>%s USD</td>", item.getPrice()));
-            tableData.append("<td><a href = \"\"><button>Add</button></a></td>");
-            tableData.append("<td><a href = \"\"><button>Remove</button></a></td>");
+            tableData.append("<td><a href = \"/?object=" + item.getProductName() + "\"><button>Add</button></a></td>");
+            tableData.append("<td><a href = \"/?object_remove="+ item.getProductName() + "\"><button>Remove</button></a></td>");
             tableData.append("</tr>");
         }
 
@@ -125,10 +128,42 @@ public class WebShopServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+        //Stock gets repopulated at every get, not ideal;
         this.populateStock();
         resp.setContentType("text/html");
+        //HTML page gets rendered.
         renderPage(req, resp);
 
 
+
+        //Query Params for the buttons.
+        String objectName = req.getParameter("object");
+        String objectRemove = req.getParameter("object_remove");
+
+
+        if (objectName != null) {
+            for (Item item:currentStock.getItemsInStock()
+                 ) {
+                if(item.getProductName().equals(objectName)){
+                    currentCart.addItemToCart(item);
+                }
+            }
+        }
+
+        if (objectRemove != null) {
+            for (Item item:currentStock.getItemsInStock()
+            ) {
+                if(item.getProductName().equals(objectRemove)){
+                    currentCart.removeItemFromCart(item);
+                    break;
+                }
+            }
+        }
+
+        System.out.println(currentCart);
+
+
     }
+
+
 }
