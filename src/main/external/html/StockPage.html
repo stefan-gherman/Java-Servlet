@@ -3,15 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <title>Stock</title>
-    <link href="./src/main/external/css/styles.css" rel="stylesheet" type="text/css">
+    <link href="/src/main/external/css/styles.css" rel="stylesheet" type="text/css">
 </head>
 <body>
+{{stockItems}}
     <table align="center">
         <thead>
         <th>Product</th>
         <th>Price</th>
         </thead>
         <tbody>
+        {% for item in stock %}
+            <tr>
+                <td>item.id</td>
+                <td>item.name</td>
+                <td class="no-color"><a href=""><button>Add</button></a></td>
+                <td class="no-color"><a href=""><button>Remove</button></a></td>
+            </tr>
+        {% end %}
         </tbody>
     </table>
 </body>

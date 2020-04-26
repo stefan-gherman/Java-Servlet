@@ -2,6 +2,7 @@ package com.codecool.logic;
 
 import com.sun.tools.javac.jvm.Items;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 

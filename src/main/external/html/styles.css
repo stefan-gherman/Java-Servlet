@@ -8,8 +8,13 @@ th, td {
     border: 1px solid black;
     padding: 5px;
     height: 30px;
+    font-size: 24px;
 }
 
 td {
-    background-color: gray;
+    background-color: lightgrey;
+}
+
+.no-color {
+    background-color: white;
 }

@@ -2,7 +2,7 @@ package com.codecool.logic;
 
 import java.util.Random;
 
-public class Item {
+public class Item implements Comparable<Item> {
 
     private int id;
     private String productName;
@@ -45,4 +45,8 @@ public class Item {
     }
 
 
+    @Override
+    public int compareTo(Item item) {
+        return this.getProductName().compareTo(item.productName);
+    }
 }

@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet(name = "simpleServlet", urlPatterns = {"/"}, loadOnStartup = 1)
+@WebServlet(name = "simpleServlet", urlPatterns = {"/servlett"}, loadOnStartup = -1)
 public class ServletWithAnnotations extends HttpServlet {
 
     @Override
