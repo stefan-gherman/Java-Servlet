@@ -31,4 +31,13 @@ public class Cart {
                 "itemsList=" + itemsList +
                 '}';
     }
+
+    public float calculateCartPrice() {
+        float totalSum = 0;
+        for (Item item: itemsList
+             ) {
+            totalSum += item.getPrice();
+        }
+        return totalSum;
+    }
 }

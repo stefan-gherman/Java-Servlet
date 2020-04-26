@@ -1,0 +1,15 @@
+table {
+    border: 2px solid black;
+    border-collapse: collapse;
+    font-size: 24px;
+}
+
+th, td {
+    border: 1px solid black;
+    padding: 5px;
+    height: 30px;
+}
+
+td {
+    background-color: gray;
+}
