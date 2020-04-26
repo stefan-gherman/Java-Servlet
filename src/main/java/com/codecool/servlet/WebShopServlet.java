@@ -9,6 +9,7 @@ import au.com.codeka.carrot.resource.FileResourceLocator;
 import com.codecool.logic.Cart;
 import com.codecool.logic.Item;
 import com.codecool.logic.Stock;
+import com.codecool.static_generators.CSSStyler;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -45,6 +46,10 @@ public class WebShopServlet extends HttpServlet {
 
     }
 
+    public Cart getCurrentCart() {
+        return currentCart;
+    }
+
     public void renderPage(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
         //Creates the writer that will output content on the page.
@@ -70,37 +75,15 @@ public class WebShopServlet extends HttpServlet {
 
 
         //Creating CSS styles until I find out how to serve static files.
-        StringBuffer cssStyles = new StringBuffer();
-        cssStyles.append("<style>");
-        cssStyles.append("table {" +
-                "border: 2px solid black;" +
-                "border-collapse:collapse;" +
-                "}");
-        cssStyles.append("th, td {\n" +
-                "    border: 1px solid black;\n" +
-                "    padding: 5px;\n" +
-                "    height: 30px;\n" +
-                "    font-size: 24px;\n" +
-                "    text-align: center;\n" +
-                "}");
-        cssStyles.append("td {\n" +
-                "background-color: lightgrey;" +
-                "\n}");
-        cssStyles.append("h1 {\n" +
-                "font-size: 24px;" +
-                "\n}");
-        cssStyles.append(".cart_button {\n" +
-                "font-size:36px;\n" +
-                "margin:20px;\n" +
-                "}");
-        cssStyles.append("</style>");
+        CSSStyler styler = new CSSStyler();
+        StringBuffer style = styler.applyPrebuiltCSS();
 
         //HTML head
         pageWriter.println("<html lang=\"en\">");
         pageWriter.println("<head>" +
                 "<meta charset=\"UTF-8\">" +
                 "<title>Stock</title>" +
-                cssStyles +
+                style +
                 "</head>"
         );
 
@@ -119,7 +102,7 @@ public class WebShopServlet extends HttpServlet {
                 "</tbody>" +
                 "</table>" +
                 "<div style=\"text-align:center;\">"+
-                "<a align=\"center\"><button align=\"center\" class=\"cart_button\">Check Cart</button></a>"+
+                "<a href= \"/shoppingCart?cart_contents=" + this.currentCart.getItemsListAsArray() + "\" align=\"center\"><button align=\"center\" class=\"cart_button\">Check Cart</button></a>"+
                 "</div>"+
                 "</body>");
         pageWriter.println("</html>");
@@ -132,7 +115,7 @@ public class WebShopServlet extends HttpServlet {
         this.populateStock();
         resp.setContentType("text/html");
         //HTML page gets rendered.
-        renderPage(req, resp);
+
 
 
 
@@ -160,7 +143,9 @@ public class WebShopServlet extends HttpServlet {
             }
         }
 
-        System.out.println(currentCart);
+        //System.out.println(currentCart);
+        //System.out.println(currentCart.getCartContentJSON());
+        renderPage(req, resp);
 
 
     }

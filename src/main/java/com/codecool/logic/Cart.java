@@ -1,7 +1,15 @@
 package com.codecool.logic;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Cart {
 
@@ -26,6 +34,19 @@ public class Cart {
 
     public List<Item> getItemsList() {
         return itemsList;
+    }
+
+    public List<String> getItemsListAsArray() {
+        List<String> cartAsArray= new ArrayList<String>();
+
+        for (Item currentItem : itemsList ){
+            cartAsArray.add(String.format("productName:%s? price:%s?*", currentItem.getProductName(), currentItem.getPrice()));
+        }
+        return cartAsArray;
+    }
+
+    public String getCartContentJSON() {
+        return new Gson().toJson(itemsList).toString();
     }
 
     @Override
