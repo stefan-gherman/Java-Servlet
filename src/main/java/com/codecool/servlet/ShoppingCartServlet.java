@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.regex.Pattern;
@@ -24,7 +25,7 @@ public class ShoppingCartServlet extends HttpServlet {
 
         StringBuffer tableWriter = new StringBuffer();
 
-        //Table Contents are beign pre processed here
+        //Table Contents are being pre processed here
         for(int i=0;i<conversionResults.length-1;i++) {
             //the current element is stored in a variable for ease of access
             String currentElement = conversionResults[i];
@@ -52,6 +53,14 @@ public class ShoppingCartServlet extends HttpServlet {
         CSSStyler styler = new CSSStyler();
         StringBuffer style = styler.applyPrebuiltCSS();
 
+        HttpSession session = req.getSession(false);
+        String placeHolder = "";
+        if(session != null) {
+
+            placeHolder = session.getAttribute("currentUser").toString();
+        } else {
+            placeHolder = "";
+        }
         pageWriter.println("<!DOCTYPE html>\n" +
                 "<html>\n" +
                 "<head>\n" +
@@ -72,6 +81,12 @@ public class ShoppingCartServlet extends HttpServlet {
                 "<div style=\"margin-top:30px; text-align:center;\">"+
                 "<a href=\"/" + "\"><button class=\"cart_button\">Go Back</button></a>" +
                         "<h1> Sum of price " + totalSum + " USD </h1>"+
+                //additional content from session
+                "<h2>" + placeHolder + "</h2>" +
+                "<form method=\"post\" action=\"/shoppingCart\">\n" +
+                "    <input type=\"hidden\" id=\"logout\" name=\"logout\">\n" +
+                "    <input type=\"submit\" value=\"Put your shades on\">\n" +
+                "</form>" +
                 "</div>"+
                 "</body>\n" +
                 "</html>");
@@ -87,19 +102,37 @@ public class ShoppingCartServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         String cartContents = req.getParameter("cart_contents");
-
+        System.out.println(cartContents);
         //Cart contents from the request are parsed into a string array for further parsing
-        String[] conversionResult = convertResponseToArrayList(cartContents);
-        int i = 0;
-        for (String str:conversionResult
-             ) {
-            System.out.println(i + str);
-            i++;
-        }
+        if(cartContents != null) {
+            String[] conversionResult = convertResponseToArrayList(cartContents);
+            int i = 0;
+            for (String str : conversionResult
+            ) {
+                System.out.println(str);
+                i++;
+            }
 
-        String str = "[productName:Hunting Knife? price:100.0?";
-        System.out.println(str.indexOf(':'));
-        System.out.println(str.indexOf('?'));
-        this.renderPage(req, resp,conversionResult);
+//            String str = "[productName:Hunting Knife? price:100.0?";
+//            System.out.println(str.indexOf(':'));
+//            System.out.println(str.indexOf('?'));
+            this.renderPage(req, resp, conversionResult);
+        } else
+        {
+            String[] conversionResult = new String[] {
+                   "[productName:A Book? price:22.0?" , ", productName:Hunting Knife? price:100.0?]"
+            };
+            this.renderPage(req, resp, conversionResult);
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession(false);
+        if(session != null) {
+            session.invalidate();
+        }
+        doGet(req, resp);
+
     }
 }

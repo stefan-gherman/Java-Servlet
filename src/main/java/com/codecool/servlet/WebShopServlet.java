@@ -20,6 +20,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
@@ -66,7 +67,7 @@ public class WebShopServlet extends HttpServlet {
             tableData.append(String.format("<td>%s</td>", item.getProductName()));
             tableData.append(String.format("<td>%s USD</td>", item.getPrice()));
             tableData.append("<td><a href = \"/?object=" + item.getProductName() + "\"><button>Add</button></a></td>");
-            tableData.append("<td><a href = \"/?object_remove="+ item.getProductName() + "\"><button>Remove</button></a></td>");
+            tableData.append("<td><a href = \"/?object_remove=" + item.getProductName() + "\"><button>Remove</button></a></td>");
             tableData.append("</tr>");
         }
 
@@ -101,9 +102,17 @@ public class WebShopServlet extends HttpServlet {
                 tableData +
                 "</tbody>" +
                 "</table>" +
-                "<div style=\"text-align:center;\">"+
-                "<a href= \"/shoppingCart?cart_contents=" + this.currentCart.getItemsListAsArray() + "\" align=\"center\"><button align=\"center\" class=\"cart_button\">Check Cart</button></a>"+
-                "</div>"+
+                "<div style=\"text-align:center;\">" +
+                "<a href= \"/shoppingCart?cart_contents=" + this.currentCart.getItemsListAsArray() + "\" align=\"center\"><button align=\"center\" class=\"cart_button\">Check Cart</button></a>" +
+                //Add form for session test
+                "<form method=\"post\" action=\"/\">\n" +
+                "    <label for=\"username\">Username</label>\n" +
+                "    <input type=\"text\" id=\"username\" name=\"username\">\n" + "" +
+                "    <input type=\"Submit\" value=\"Pull the trigger\">" +
+                "</form>" +
+
+
+                "</div>" +
                 "</body>");
         pageWriter.println("</html>");
     }
@@ -117,32 +126,33 @@ public class WebShopServlet extends HttpServlet {
         //HTML page gets rendered.
 
 
-
-
         //Query Params for the buttons.
         String objectName = req.getParameter("object");
         String objectRemove = req.getParameter("object_remove");
 
 
         if (objectName != null) {
-            for (Item item:currentStock.getItemsInStock()
-                 ) {
-                if(item.getProductName().equals(objectName)){
+            for (Item item : currentStock.getItemsInStock()
+            ) {
+                if (item.getProductName().equals(objectName)) {
                     currentCart.addItemToCart(item);
                 }
             }
         }
 
         if (objectRemove != null) {
-            for (Item item:currentStock.getItemsInStock()
+            for (Item item : currentStock.getItemsInStock()
             ) {
-                if(item.getProductName().equals(objectRemove)){
+                if (item.getProductName().equals(objectRemove)) {
                     currentCart.removeItemFromCart(item);
                     break;
                 }
             }
         }
 
+
+        String username = req.getParameter("username");
+        System.out.println(username);
         //System.out.println(currentCart);
         //System.out.println(currentCart.getCartContentJSON());
         renderPage(req, resp);
@@ -150,5 +160,12 @@ public class WebShopServlet extends HttpServlet {
 
     }
 
-
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String username = req.getParameter("username");
+        System.out.println(username);
+        HttpSession session = req.getSession();
+        session.setAttribute("currentUser", username);
+        resp.sendRedirect("/shoppingCart");
+    }
 }
