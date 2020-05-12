@@ -2,6 +2,7 @@ package com.codecool.servlet;
 
 import com.codecool.logic.Cart;
 import com.codecool.static_generators.CSSStyler;
+import com.codecool.utils.Password;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -55,9 +56,16 @@ public class ShoppingCartServlet extends HttpServlet {
 
         HttpSession session = req.getSession(false);
         String placeHolder = "";
+        String passPlaceholder = "";
+        String testPw = "cal";
         if(session != null) {
 
             placeHolder = session.getAttribute("currentUser").toString();
+            passPlaceholder = session.getAttribute("userPassword").toString();
+
+            if (Password.checkPassword(testPw, passPlaceholder)) {
+                passPlaceholder = "Guessed It";
+            }
         } else {
             placeHolder = "";
         }
@@ -83,6 +91,7 @@ public class ShoppingCartServlet extends HttpServlet {
                         "<h1> Sum of price " + totalSum + " USD </h1>"+
                 //additional content from session
                 "<h2>" + placeHolder + "</h2>" +
+                "<h3>" + passPlaceholder + "</h3>" +
                 "<form method=\"post\" action=\"/shoppingCart\">\n" +
                 "    <input type=\"hidden\" id=\"logout\" name=\"logout\">\n" +
                 "    <input type=\"submit\" value=\"Put your shades on\">\n" +

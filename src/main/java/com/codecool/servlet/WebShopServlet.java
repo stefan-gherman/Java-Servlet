@@ -10,6 +10,7 @@ import com.codecool.logic.Cart;
 import com.codecool.logic.Item;
 import com.codecool.logic.Stock;
 import com.codecool.static_generators.CSSStyler;
+import com.codecool.utils.Password;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -107,7 +108,9 @@ public class WebShopServlet extends HttpServlet {
                 //Add form for session test
                 "<form method=\"post\" action=\"/\">\n" +
                 "    <label for=\"username\">Username</label>\n" +
-                "    <input type=\"text\" id=\"username\" name=\"username\">\n" + "" +
+                "    <input type=\"text\" id=\"username\" name=\"username\">\n" +
+                "    <input type=\"password\" id=\"password\" name=\"password\">\n" +
+                "    <label for=\"password\">PassWoRD</label>\n" +
                 "    <input type=\"Submit\" value=\"Pull the trigger\">" +
                 "</form>" +
 
@@ -151,8 +154,6 @@ public class WebShopServlet extends HttpServlet {
         }
 
 
-        String username = req.getParameter("username");
-        System.out.println(username);
         //System.out.println(currentCart);
         //System.out.println(currentCart.getCartContentJSON());
         renderPage(req, resp);
@@ -163,9 +164,13 @@ public class WebShopServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String username = req.getParameter("username");
-        System.out.println(username);
+        String password = req.getParameter("password");
+
+        System.out.println("Post from webshop" + username);
+        System.out.println("Post from webshop" + req.getParameter("password"));
         HttpSession session = req.getSession();
         session.setAttribute("currentUser", username);
+        session.setAttribute("userPassword", Password.hasher(password));
         resp.sendRedirect("/shoppingCart");
     }
 }
